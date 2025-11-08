@@ -1,5 +1,24 @@
+/* REINICIO GLOBAL */
+/* 1. REINICIO DE BASE (Eliminar márgenes por defecto del navegador) */
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    /* Previene scroll bars que interfieren con el 100vw/100vh */
+    overflow: hidden;
+}
+
+/* 2. ANULACIÓN CLAVE DEL CONTENEDOR DE BLAZOR */
+#app {
+    position: relative;
+    /* ? Esto fuerza el 100% del alto y ancho de la ventana visible */
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    /* ? CLAVE: Anular cualquier 'max-width' o estilo de centrado que esté limitando la caja */
+    max-width: none !important;
 }
 
 h1:focus {
@@ -17,7 +36,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -100,4 +119,105 @@ a, .btn-link {
 
 code {
     color: #c02d76;
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(180deg, #a8e6cf 0%, #dcedc1 100%);
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Logo */
+.game-logo {
+    width: 220px;
+    margin-bottom: 30px;
+    animation: fadeIn 900ms cubic-bezier(.2,.8,.2,1) both, floaty 3.5s ease-in-out infinite;
+    transform-origin: center;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
+}
+
+/* Botón */
+.start-button {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 42px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, background .2s;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+    position: relative;
+    overflow: hidden;
+}
+
+    .start-button:hover {
+        transform: translateY(-4px);
+        background-color: #2e7d32;
+    }
+
+/* Ripple */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleEffect 600ms forwards;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes floaty {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Salida de pantalla */
+.start-screen.fade-out {
+    animation: screenExit 500ms ease-in-out forwards;
+}
+
+@keyframes screenExit {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.98);
+    }
 }

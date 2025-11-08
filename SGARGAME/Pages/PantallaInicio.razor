@@ -1,0 +1,192 @@
+﻿@page "/"
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<div id="startScreen" class="start-screen">
+    <div class="background-layer"></div>
+
+    <div class="overlay"></div>
+
+    <div class="content">
+        <img id="gameLogo" src="imagenes/12.PNG" alt="Logo del Juego" class="game-logo" />
+        <button id="startBtn" class="start-button" @onclick="IniciarJuego">Iniciar</button>
+    </div>
+</div>
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+    }
+
+    .start-screen {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        background: #c8e6c9;
+    }
+
+    /* 🌲 Fondo adaptativo del bosque */
+    .background-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: url("imagenes/bosque.png") no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        z-index: 0;
+        filter: brightness(1.05) contrast(1.05);
+        transition: opacity 1s ease-in-out;
+        overflow: hidden;
+    }
+
+    /* 🌅 Ajuste extra para pantallas ultrapanorámicas */
+    @@media (min-aspect-ratio: 16/9) {
+        .background-layer
+
+    {
+        background-size: 100% auto;
+    }
+
+    }
+
+    /* 📱 Ajuste para pantallas muy altas (ej. móviles verticales) */
+    @@media (max-aspect-ratio: 9/16) {
+        .background-layer
+
+    {
+        background-size: auto 100%;
+    }
+
+    }
+
+    /* 🎨 Contenido central */
+    .content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .game-logo {
+        width: 450px;
+        max-width: 90%;
+        margin-bottom: 50px;
+        animation: bounceIn 1.8s ease;
+        filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.5));
+    }
+
+    .start-button {
+        background: linear-gradient(90deg, #4CAF50, #66BB6A);
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 40px;
+        padding: 18px 60px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        transition: all 0.3s ease;
+        animation: pulse 3s infinite;
+    }
+
+        .start-button:hover {
+            transform: scale(1.08);
+            background: linear-gradient(90deg, #43A047, #388E3C);
+            box-shadow: 0 10px 30px rgba(72, 239, 128, 0.6);
+        }
+
+    /* 🎬 Animaciones */
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    @@keyframes bounceIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+    }
+
+    @@keyframes pulse {
+        0%
+
+    {
+        box-shadow: 0 0 10px #A5D6A7, 0 0 20px #81C784;
+    }
+
+    50% {
+        box-shadow: 0 0 25px #66BB6A, 0 0 40px #43A047;
+    }
+
+    100% {
+        box-shadow: 0 0 10px #A5D6A7, 0 0 20px #81C784;
+    }
+
+    }
+</style>
+
+@code {
+    private DotNetObjectReference<PantallaInicio>? objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("playEntrance");
+        }
+    }
+
+    private async Task IniciarJuego()
+    {
+        objRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("playStartClick", objRef);
+    }
+
+    [JSInvokable]
+    public async Task OnStartAnimationComplete()
+    {
+        objRef?.Dispose();
+        objRef = null;
+        Navigation.NavigateTo("/juego");
+    }
+}
