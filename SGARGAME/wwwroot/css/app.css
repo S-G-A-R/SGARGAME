@@ -1,24 +1,5 @@
-/* REINICIO GLOBAL */
-/* 1. REINICIO DE BASE (Eliminar m�rgenes por defecto del navegador) */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    /* Previene scroll bars que interfieren con el 100vw/100vh */
-    overflow: hidden;
-}
-
-/* 2. ANULACI�N CLAVE DEL CONTENEDOR DE BLAZOR */
-#app {
-    position: relative;
-    /* ? Esto fuerza el 100% del alto y ancho de la ventana visible */
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
-    padding: 0;
-    /* ? CLAVE: Anular cualquier 'max-width' o estilo de centrado que est� limitando la caja */
-    max-width: none !important;
+﻿html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1:focus {
@@ -121,103 +102,365 @@ code {
     color: #c02d76;
 }
 
-.start-screen {
+
+
+
+
+
+
+/* Estilos generales del contenedor */
+.recycling-game-container {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa; /* Un fondo azul claro similar al de la imagen */
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: linear-gradient(180deg, #a8e6cf 0%, #dcedc1 100%);
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    max-width: 600px; /* Ancho máximo para el contenido */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    color: #4CAF50; /* Color verde para el texto del header */
+    font-weight: bold;
+}
+
+    .header .menu-icon,
+    .header .dots-icon {
+        font-size: 24px;
+    }
+
+    .header .app-title {
+        font-size: 20px;
+    }
+
+    .header .category-map {
+        font-size: 16px;
+    }
+
+/* Tarjeta de contenido principal */
+.content-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    overflow: hidden;
 }
 
-/* Logo */
-.game-logo {
-    width: 220px;
-    margin-bottom: 30px;
-    animation: fadeIn 900ms cubic-bezier(.2,.8,.2,1) both, floaty 3.5s ease-in-out infinite;
-    transform-origin: center;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
+    .content-card h2 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .content-card p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+/* Contenedores de ítems de reciclaje */
+.recycling-items-top,
+.recycling-items-middle,
+.recycling-category-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas más pequeñas */
 }
 
-/* Bot�n */
-.start-button {
-    background-color: #388e3c;
+.item-box {
+    background-color: #f0f0f0; /* Fondo claro para las cajas de ítems */
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+    .item-box img {
+        width: 80px; /* Ajusta el tamaño de la imagen */
+        height: 80px;
+        object-fit: contain;
+    }
+
+.recycling-category-row .category-item-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.recycling-category-row .category-item {
+    background-color: #e8f5e9; /* Fondo verde muy claro */
+    border-radius: 50%; /* Para hacerlo circular */
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+    .recycling-category-row .category-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+    }
+
+.recycling-category-row p {
+    font-size: 12px;
+    color: #555;
+    margin: 0;
+}
+
+/* Contenedor de los cubos de basura */
+.bins-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.bin {
+    width: 100px;
+    height: 150px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: flex-end; <-- ELIMINA O COMENTA ESTA LÍNEA */
+    padding-bottom: 5px; /* Reducir el padding-bottom */
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .bin p {
+        position: absolute; /* Posicionamiento absoluto */
+        bottom: 5px; /* Distancia desde la parte inferior (ajusta a tu gusto) */
+        width: 100%; /* Asegura que ocupe todo el ancho para centrar */
+        margin: 0; /* Elimina el margen por defecto del párrafo */
+        line-height: 1.1; /* Ajusta la altura de línea para texto de 2 líneas */
+    }
+
+    .bin .bin-item {
+        position: absolute;
+        top: 10px;
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+    }
+
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    /* ... otros estilos de media query ... */
+
+    .bin {
+        width: 80px;
+        height: 130px; /* Aumenta la altura del contenedor ligeramente */
+        font-size: 10px;
+    }
+
+        /* Reducir el tamaño de fuente aún más para pantallas pequeñas si el texto de dos líneas se sale: */
+        .bin p {
+            font-size: 10px;
+            bottom: 5px;
+        }
+
+    /* ... otros estilos de media query ... */
+}
+
+.bin.yellow {
+    background-color: #FFC107;
+}
+/* Amarillo */
+.bin.blue {
+    background-color: #2196F3;
+}
+/* Azul */
+.bin.green {
+    background-color: #4CAF50;
+}
+/* Verde */
+.bin.organic {
+    background-color: #ff8000;
+}
+/* Verde orgánico */
+.bin.gray {
+    background-color: #9E9E9E;
+}
+/* Gris */
+
+.bin .bin-item {
+    position: absolute;
+    top: 10px; /* Posicionar el ítem en la parte superior del cubo */
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* Footer (mapache y botón) */
+.footer {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    flex-wrap: wrap; /* Permitir que los elementos del footer se envuelvan */
+}
+
+.raccoon-dialog {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.raccoon-img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    border-radius: 50%; /* Si quieres que la imagen del mapache sea circular */
+    object-fit: cover;
+}
+
+.raccoon-dialog p {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.understand-button {
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 12px;
-    padding: 14px 42px;
-    font-size: 1.15rem;
+    border-radius: 25px;
+    padding: 12px 25px;
+    font-size: 16px;
     cursor: pointer;
-    transition: transform .18s ease, box-shadow .18s ease, background .2s;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.16);
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
 }
 
-    .start-button:hover {
-        transform: translateY(-4px);
-        background-color: #2e7d32;
+    .understand-button:hover {
+        background-color: #45a049;
     }
 
-/* Ripple */
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: rippleEffect 600ms forwards;
-    pointer-events: none;
-    opacity: 0.9;
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.96);
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .header, .content-card, .footer {
+        max-width: 95%;
     }
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes floaty {
-    0% {
-        transform: translateY(0px);
+    .bins-container {
+        justify-content: space-around;
+        gap: 5px;
     }
 
-    50% {
-        transform: translateY(-10px);
+    .bin {
+        width: 80px;
+        height: 120px;
+        font-size: 10px;
     }
 
-    100% {
-        transform: translateY(0px);
+    .raccoon-dialog {
+        margin-bottom: 15px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
     }
 }
 
-@keyframes rippleEffect {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
+
+
+
+
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-/* Salida de pantalla */
-.start-screen.fade-out {
-    animation: screenExit 500ms ease-in-out forwards;
+/* Modal window */
+.modal-content {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-@keyframes screenExit {
-    0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+    .modal-content h2 {
+        color: #333;
+        margin-bottom: 15px;
     }
 
-    100% {
-        opacity: 0;
-        transform: translateY(-20px) scale(0.98);
+    .modal-content textarea {
+        width: 100%;
+        height: 150px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        resize: none;
+        margin-bottom: 15px;
     }
+
+.close-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+    .close-button:hover {
+        background-color: #388E3C;
+    }
+
+.bins-container p {
+    color: black !important;
+}
+
+/* Logo del juego en el header */
+.logo-img {
+    width: 100px; /* Tamaño fijo, puedes ajustar */
+    height: auto; /* Mantiene proporciones */
+    margin-right: 8px; /* Espacio con el texto SGAR GAME */
+    vertical-align: middle;
 }

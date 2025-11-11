@@ -1,0 +1,242 @@
+﻿@page "/MenuCategorias"
+
+<div class="category-map-container">
+    <div class="map-path">
+
+        <div class="map-header">
+            <h1 class="game-title">SGARGAME</h1>
+            <p class="subtitle">Mapa de Categorías</p>
+        </div>
+
+
+        <div class="category-node" style="left: 45%; top: 35%;">
+            @* Aumentado de 25% a 35% *@
+            <a href="/categoria1">
+                <div class="node-icon category-1-icon">
+                    <img src="imagenes/question.png" alt="Aprender sobre reciclaje" />
+                </div>
+                <span class="node-label">Categoría 1: Aprende sobre reciclaje</span>
+            </a>
+        </div>
+
+        <div class="category-node" style="left: 30%; top: 58%;">
+            @* Aumentado de 50% a 58% *@
+            <a href="/ordenarecicla">
+                <div class="node-icon category-2-icon">
+                    <img src="imagenes/papelerasgame.png" alt="Ordena y Recicla" />
+                </div>
+                <span class="node-label">Categoría 2: Ordena y Recicla</span>
+            </a>
+        </div>
+
+        <div class="category-node" style="left: 45%; top: 81%;">
+            @* Aumentado de 75% a 81% *@
+            <a href="/evaluacionguardian">
+                <div class="node-icon category-3-icon">
+                    <img src="imagenes/portapapeles.png" alt="Evaluación del Guardián" />
+                </div>
+                <span class="node-label">Categoria 3: Evaluación del Guardián</span>
+            </a>
+        </div>
+
+        @* CONTENEDOR DEL MAPACHE AJUSTADO A LA NUEVA POSICIÓN DEL MAPA *@
+        <div class="raccoon-dialog-container" style="left: 65%; top: 60%;">
+            @* Ajustado de 55% a 60% *@
+            <p class="dialog-bubble">¡Este es el camino para ser un Guardián del Reciclaje!</p>
+            <img src="/imagenes/mapache.png" class="raccoon-img" />
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* ------------------------------------- */
+    /* ESTILOS DEL TÍTULO */
+    /* ------------------------------------- */
+    /* Nota: El 'top: 20px' de .map-header lo deja fijo en la parte superior. */
+    .map-header {
+        position: absolute;
+        top: 20px;
+        width: 100%;
+        text-align: center;
+        z-index: 30;
+        color: #1a1a1a;
+    }
+
+    .game-title {
+        font-family: 'fantasy', sans-serif;
+        font-size: 3.5em;
+        color: #007bff;
+        text-shadow: 3px 3px 0 #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 1px 1px 0 #333;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .subtitle {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #3c8d3c;
+        margin-top: 5px;
+    }
+
+
+    /* ------------------------------------- */
+    /* CONTENEDOR PRINCIPAL Y FONDO (SIN CAMBIOS) */
+    /* ------------------------------------- */
+    .category-map-container {
+        width: 100%;
+        min-height: 100vh;
+        background-image: url('img/map_background_vertical.png');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .map-path {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+    }
+
+    /* ------------------------------------- */
+    /* ESTILOS DE LOS NODOS (SIN CAMBIOS ESTRUCTURALES) */
+    /* ------------------------------------- */
+    .category-node {
+        position: absolute;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        border: 4px solid #3c8d3c;
+        z-index: 10;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        transform: translate(-50%, -50%); /* Clave para el centrado exacto */
+    }
+
+        .category-node:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .category-node a {
+            text-decoration: none;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+        }
+
+    .node-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+        .node-icon img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+    .node-label {
+        font-weight: bold;
+        font-size: 0.85em;
+        line-height: 1.1;
+        max-width: 90%;
+    }
+
+    /* Estilos de color para los iconos (sin cambios) */
+    .category-1-icon {
+        background-color: #ffd700;
+    }
+
+    .category-2-icon {
+        background-color: #90ee90;
+    }
+
+    .category-3-icon {
+        background-color: #add8e6;
+    }
+
+    /* ------------------------------------- */
+    /* ESTILOS DEL MAPACHE Y BURBUJA (AJUSTADOS POR TAMAÑO PEQUEÑO) */
+    /* ------------------------------------- */
+
+    .raccoon-dialog-container {
+        position: absolute;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        transform: translate(-50%, -50%);
+        z-index: 20;
+    }
+
+    /* Reducción de tamaño del mapache */
+    .raccoon-img {
+        width: 100px;
+        height: auto;
+    }
+
+    /* Estilo de la burbuja de diálogo (ajustado para ser más pequeño y más alto) */
+    .dialog-bubble {
+        position: absolute;
+        background: #ffffff;
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 8px 12px;
+        margin: 0;
+        max-width: 90px;
+        text-align: center;
+        font-size: 0.6em;
+        color: #1a1a1a;
+        font-weight: bold;
+        /* AJUSTE de posición para el mapache de 100px */
+        bottom: 100px; /* Sube la burbuja respecto al mapache */
+        right: -50px; /* Se mueve 20px más a la derecha de su punto de anclaje (0px) */
+    }
+        /* Estilo para la "cola" o flecha de la burbuja (ajustado para ser más pequeño) */
+        .dialog-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 40px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-top-color: #333;
+            border-bottom: 0;
+            border-right-width: 4px;
+            border-left-width: 4px;
+        }
+
+        /* Fondo blanco dentro de la cola (para el relleno) */
+        .dialog-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            right: 40px;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-top-color: #ffffff;
+            border-bottom: 0;
+            border-right-width: 3px;
+            border-left-width: 3px;
+            z-index: 1;
+        }
+</style>

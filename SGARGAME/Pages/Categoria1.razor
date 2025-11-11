@@ -1,0 +1,119 @@
+﻿@page "/categoria1"
+
+<div class="recycling-game-container">
+    <div class="header">
+        <span class="menu-icon">&#9776;</span>
+        <span class="app-title">SGAR GAME</span>
+        <img src="/imagenes/SGARLOGO.png" alt="Logo del juego" class="logo-img" />
+        <!-- ELEMENTO ACTUALIZADO: Enlace con estilo de botón -->
+
+        <a href="/MenuCategorias" class="understand-button map-button-header">MAPA DE CATEGORIAS</a>
+        <span class="dots-icon">&#8942;</span>
+    </div>
+
+    <div class="content-card">
+        <h1>Categoría 1:</h1>
+        <h1>Aprende sobre Reciclaje</h1>
+        <p>¡Guía rápida para clasificar tu basura!</p>
+
+        <div class="recycling-items-top">
+            <div class="item-box"><img src="/imagenes/lataplastico.png" alt="Plastico y Latas" /></div>
+            <div class="item-box"><img src="/imagenes/periodico.png" alt="Papel y Cartón" /></div>
+            <div class="item-box"><img src="/imagenes/vidrio.png" alt="Vidrio" /></div>
+            <div class="item-box"><img src="/imagenes/banana.png" alt="Organico" /></div>
+            <div class="item-box"><img src="/imagenes/platosrotos.png" alt="No Reciclable" /></div>
+        </div>
+
+        <div class="bins-container">
+            <div class="bin yellow" @onclick="() => MostrarInfoAmarillo()">
+                <img src="/imagenes/papeleralatas.png" class="bin-item" />
+                <p>PLÁSTICO / LATAS</p>
+            </div>
+
+            <div class="bin blue" @onclick="() => MostrarInfoAzul()">
+                <img src="/imagenes/papelerapapel.png" class="bin-item" />
+                <p>PAPEL / CARTÓN</p>
+            </div>
+
+            <div class="bin green" @onclick="() => MostrarInfoVerde()">
+                <img src="/imagenes/papeleravidrio.png" class="bin-item" />
+                <p>VIDRIO</p>
+            </div>
+
+            <div class="bin organic" @onclick="() => MostrarInfoOrganico()">
+                <img src="/imagenes/papeleraorganicos.png" class="bin-item" />
+                <p>ORGÁNICO</p>
+            </div>
+
+            <div class="bin gray" @onclick="() => MostrarInfoGris()">
+                <img src="/imagenes/papeleranoreci.png" class="bin-item" />
+                <p>NO RECICLABLE</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="raccoon-dialog">
+            <img src="/imagenes/mapache.png" class="raccoon-img" />
+            <p>¡Es fácil si sabes dónde va cada cosa!</p>
+        </div>
+        <button class="understand-button">ENTENDIDO. ¡A JUGAR! →</button>
+    </div>
+</div>
+
+@if (mostrarModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h2>@tituloModal</h2>
+            <p>@descripcionModal</p>
+            <button class="close-button" @onclick="CerrarModal">Cerrar</button>
+        </div>
+    </div>
+}
+
+@code {
+    private bool mostrarModal = false;
+    private string tituloModal = "";
+    private string descripcionModal = "";
+
+    private void MostrarInfoAmarillo()
+    {
+        tituloModal = "Contenedor Amarillo";
+        descripcionModal = "Sirve para depositar plásticos y latas: botellas, envases de yogur, bolsas, latas de refrescos, etc.";
+        mostrarModal = true;
+    }
+
+    private void MostrarInfoAzul()
+    {
+        tituloModal = "Contenedor Azul";
+        descripcionModal = "Sirve para papel y cartón: cajas, periódicos, revistas, sobres y envases de cartón.";
+        mostrarModal = true;
+    }
+
+    private void MostrarInfoVerde()
+    {
+        tituloModal = "Contenedor Verde";
+        descripcionModal = "Aquí va el vidrio: botellas, frascos y tarros sin tapas ni corchos.";
+        mostrarModal = true;
+    }
+
+    private void MostrarInfoOrganico()
+    {
+        tituloModal = "Contenedor Orgánico";
+        descripcionModal = "Aquí van los restos biodegradables: cáscaras, sobras de comida, restos de frutas, etc.";
+        mostrarModal = true;
+    }
+
+    private void MostrarInfoGris()
+    {
+        tituloModal = "Contenedor Gris";
+        descripcionModal = "Se usa para residuos no reciclables: pañales, colillas, cerámica, papel sucio, etc.";
+        mostrarModal = true;
+    }
+
+    private void CerrarModal()
+    {
+        mostrarModal = false;
+    }
+}
