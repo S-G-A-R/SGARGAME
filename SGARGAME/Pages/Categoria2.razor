@@ -1,0 +1,73 @@
+﻿@page "/nivel1"
+@inject IJSRuntime JS
+
+<link href="css/juego.css" rel="stylesheet" />
+
+<div class="nivel1-container">
+    <h2 class="titulo-nivel">♻️ Nivel 1 - Reciclaje</h2>
+
+    <div class="hud">
+        <div class="hud-item">
+            <span class="hud-label">Puntos</span>
+            <span class="hud-value">@puntos</span>
+        </div>
+        <div class="hud-item">
+            <span class="hud-label">Vidas</span>
+            <span class="hud-value">@vidas</span>
+        </div>
+    </div>
+
+    <div id="gameArea">
+        <!-- El canvas puede estar aquí o será creado por JS si no existe -->
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <!-- Los botes los crea el JS dinámicamente dentro de #gameArea -->
+    </div>
+
+    <div class="botones">
+        <button @onclick="IniciarJuego" class="btn-iniciar">
+            🚀 Iniciar Juego
+        </button>
+    </div>
+</div>
+
+<!-- carga el script al final del componente para asegurarnos que el DOM exista -->
+<script src="css/juego.js" rel="stylesheet"></script>
+
+@code {
+    private int puntos = 0;
+    private int vidas = 3;
+
+    private async Task IniciarJuego()
+    {
+        puntos = 0;
+        vidas = 3;
+        StateHasChanged();
+        // Llamamos al JS; JS se encargará de crear botes si hacen falta
+        await JS.InvokeVoidAsync("iniciarJuego", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public async Task AumentarPuntos()
+    {
+        puntos += 5;
+        StateHasChanged();
+
+        if (puntos % 50 == 0)
+        {
+            await JS.InvokeVoidAsync("aumentarVelocidad");
+        }
+    }
+
+    [JSInvokable]
+    public async Task PerderVida()
+    {
+        vidas--;
+        StateHasChanged();
+
+        if (vidas <= 0)
+        {
+            await JS.InvokeVoidAsync("terminarJuego", puntos);
+        }
+    }
+}
+
