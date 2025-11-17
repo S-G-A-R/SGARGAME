@@ -9,7 +9,7 @@
         </div>
 
 
-        <div class="category-node" style="left: 45%; top: 35%;">
+        <div class="category-node" style="left: 45%; top: 25%;">
             @* Aumentado de 25% a 35% *@
             <a href="/categoria1">
                 <div class="node-icon category-1-icon">
@@ -19,7 +19,7 @@
             </a>
         </div>
 
-        <div class="category-node" style="left: 30%; top: 58%;">
+        <div class="category-node" style="left: 30%; top: 48%;">
             @* Aumentado de 50% a 58% *@
             <a href="/ordenarecicla">
                 <div class="node-icon category-2-icon">
@@ -29,7 +29,7 @@
             </a>
         </div>
 
-        <div class="category-node" style="left: 45%; top: 81%;">
+        <div class="category-node" style="left: 45%; top: 71%;">
             @* Aumentado de 75% a 81% *@
             <a href="/evaluacionguardian">
                 <div class="node-icon category-3-icon">
@@ -43,7 +43,7 @@
         <div class="raccoon-dialog-container" style="left: 65%; top: 60%;">
             @* Ajustado de 55% a 60% *@
             <p class="dialog-bubble">¡Este es el camino para ser un Guardián del Reciclaje!</p>
-            <img src="/imagenes/mapache.png" class="raccoon-img" />
+            <img src="/imagenes/mapachefelix.png" class="raccoon-img" />
         </div>
 
     </div>
@@ -51,56 +51,81 @@
 
 <style>
     /* ------------------------------------- */
-    /* ESTILOS DEL TÍTULO */
+    /* FUENTE Y FONDO */
     /* ------------------------------------- */
-    /* Nota: El 'top: 20px' de .map-header lo deja fijo en la parte superior. */
+    @@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Poppins:wght@400;600&display=swap');
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden; /* IMPORTANTE: evita cualquier borde */
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Fondo sin bordes */
+    .category-map-container {
+        position: fixed; /* CAMBIO CLAVE: siempre cubre toda la pantalla */
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        background: url("imagenes/bosquee.png") no-repeat center center;
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+        /* Capa translúcida */
+        .category-map-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(250, 250, 250, 0.25);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+    /* AHORA sí, tu contenido va encima */
+    .map-path {
+        position: relative;
+        z-index: 5;
+        width: 100%;
+        height: 100%;
+    }
+
+
+
+
+    /* ------------------------------------- */
+    /* TÍTULO Y SUBTÍTULO */
+    /* ------------------------------------- */
     .map-header {
-        position: absolute;
-        top: 20px;
+        position: relative;
+        top: 30px;
         width: 100%;
         text-align: center;
-        z-index: 30;
-        color: #1a1a1a;
+        z-index: 5;
     }
 
     .game-title {
-        font-family: 'fantasy', sans-serif;
+        font-family: 'Baloo 2', cursive;
         font-size: 3.5em;
-        color: #007bff;
-        text-shadow: 3px 3px 0 #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 1px 1px 0 #333;
+        color: #009879;
         margin: 0;
-        line-height: 1;
+        letter-spacing: 2px;
     }
 
     .subtitle {
-        font-size: 1.5em;
+        font-size: 1.4em;
         font-weight: bold;
-        color: #3c8d3c;
+        color: #444;
         margin-top: 5px;
     }
 
-
     /* ------------------------------------- */
-    /* CONTENEDOR PRINCIPAL Y FONDO (SIN CAMBIOS) */
-    /* ------------------------------------- */
-    .category-map-container {
-        width: 100%;
-        min-height: 100vh;
-        background-image: url('img/map_background_vertical.png');
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .map-path {
-        position: relative;
-        width: 100%;
-        height: 100vh;
-    }
-
-    /* ------------------------------------- */
-    /* ESTILOS DE LOS NODOS (SIN CAMBIOS ESTRUCTURALES) */
+    /* CÍRCULOS DE CATEGORÍAS */
     /* ------------------------------------- */
     .category-node {
         position: absolute;
@@ -110,133 +135,248 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 150px;
-        height: 150px;
+        width: 200px;
+        height: 200px;
         background-color: rgba(255, 255, 255, 0.9);
         border-radius: 50%;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        border: 4px solid #3c8d3c;
-        z-index: 10;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s;
-        transform: translate(-50%, -50%); /* Clave para el centrado exacto */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        border: 3px solid #2c8c4a;
+        z-index: 3;
+        transition: transform 0.3s ease, box-shadow 0.3s;
+        animation: floating 4s ease-in-out infinite;
     }
 
         .category-node:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
-        .category-node a {
-            text-decoration: none;
-            color: #1a1a1a;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            padding: 10px;
+    @@keyframes floating {
+        0%, 100% {
+            transform: translateY(0);
         }
+
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+
+    .category-node a {
+        text-decoration: none;
+        color: #222;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
 
     .node-icon {
         width: 70px;
         height: 70px;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 50%;
     }
 
         .node-icon img {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 80%;
+            max-height: 80%;
         }
 
     .node-label {
         font-weight: bold;
-        font-size: 0.85em;
-        line-height: 1.1;
-        max-width: 90%;
-    }
-
-    /* Estilos de color para los iconos (sin cambios) */
-    .category-1-icon {
-        background-color: #ffd700;
-    }
-
-    .category-2-icon {
-        background-color: #90ee90;
-    }
-
-    .category-3-icon {
-        background-color: #add8e6;
+        font-size: 0.9em;
     }
 
     /* ------------------------------------- */
-    /* ESTILOS DEL MAPACHE Y BURBUJA (AJUSTADOS POR TAMAÑO PEQUEÑO) */
+    /* MAPACHE Y BURBUJA - AJUSTADO */
     /* ------------------------------------- */
-
     .raccoon-dialog-container {
         position: absolute;
         display: flex;
         align-items: flex-end;
         justify-content: center;
         transform: translate(-50%, -50%);
-        z-index: 20;
+        z-index: 5;
+        /* 🔹 Mueve el mapache un poco más cerca del centro */
+        top: 63%;
+        left: 63%;
     }
 
-    /* Reducción de tamaño del mapache */
+    /* 🔹 Tamaño del mapache más grande */
     .raccoon-img {
-        width: 100px;
+        width: 160px;
         height: auto;
+        animation: wagTail 3s infinite ease-in-out;
     }
 
-    /* Estilo de la burbuja de diálogo (ajustado para ser más pequeño y más alto) */
+    /* 🔹 Burbuja más clara y ligera */
     .dialog-bubble {
         position: absolute;
-        background: #ffffff;
-        border: 2px solid #333;
-        border-radius: 10px;
-        padding: 8px 12px;
-        margin: 0;
-        max-width: 90px;
+        background: rgba(255, 255, 255, 0.6); /* más transparente */
+        border: 2px solid rgba(44, 140, 74, 0.4); /* borde más suave */
+        border-radius: 14px;
+        padding: 12px 16px;
+        max-width: 160px;
         text-align: center;
-        font-size: 0.6em;
+        font-size: 0.8em;
+        font-weight: 600;
         color: #1a1a1a;
-        font-weight: bold;
-        /* AJUSTE de posición para el mapache de 100px */
-        bottom: 100px; /* Sube la burbuja respecto al mapache */
-        right: -50px; /* Se mueve 20px más a la derecha de su punto de anclaje (0px) */
+        backdrop-filter: blur(4px); /* efecto cristal suave */
+        /* 🔹 Más cerca del mapache */
+        bottom: 120px;
+        right: -70px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-        /* Estilo para la "cola" o flecha de la burbuja (ajustado para ser más pequeño) */
+
+        /* 🔹 Flechita más sutil */
         .dialog-bubble::after {
             content: '';
             position: absolute;
             bottom: -10px;
-            right: 40px;
+            right: 50px;
             width: 0;
             height: 0;
             border: 8px solid transparent;
-            border-top-color: #333;
-            border-bottom: 0;
-            border-right-width: 4px;
-            border-left-width: 4px;
+            border-top-color: rgba(44, 140, 74, 0.4);
         }
 
-        /* Fondo blanco dentro de la cola (para el relleno) */
         .dialog-bubble::before {
             content: '';
             position: absolute;
             bottom: -7px;
-            right: 40px;
+            right: 50px;
             width: 0;
             height: 0;
             border: 6px solid transparent;
-            border-top-color: #ffffff;
-            border-bottom: 0;
-            border-right-width: 3px;
-            border-left-width: 3px;
+            border-top-color: rgba(255, 255, 255, 0.6);
             z-index: 1;
         }
+
+    /* 🔹 Animación simpática del mapache */
+    @@keyframes wagTail {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+
+        50% {
+            transform: rotate(3deg);
+        }
+    }
+
+    /* ============================================================
+           📱 RESPONSIVE – Ajuste para pantallas pequeñas
+           ============================================================ */
+
+    /* Tablets (pantallas medianas) */
+    @@media (max-width: 1024px) {
+        .category-node {
+            width: 160px;
+            height: 160px;
+        }
+
+        .node-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .raccoon-img {
+            width: 130px;
+        }
+
+        .dialog-bubble {
+            font-size: 0.75em;
+            max-width: 150px;
+            right: -50px;
+            bottom: 100px;
+        }
+    }
+
+    /* Celulares grandes */
+    @@media (max-width: 768px) {
+        .game-title {
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            font-size: 1em;
+        }
+
+        .category-node {
+            width: 130px;
+            height: 130px;
+        }
+
+        .node-label {
+            font-size: 0.75em;
+        }
+        /* 🔹 Reubicación inteligente de los nodos */
+        .category-node:nth-child(2) {
+            left: 50% !important;
+            top: 28% !important;
+            transform: translateX(-50%);
+        }
+
+        .category-node:nth-child(3) {
+            left: 50% !important;
+            top: 50% !important;
+            transform: translateX(-50%);
+        }
+
+        .category-node:nth-child(4) {
+            left: 50% !important;
+            top: 72% !important;
+            transform: translateX(-50%);
+        }
+        /* Mapache centrado */
+        .raccoon-dialog-container {
+            left: 50% !important;
+            top: 88% !important;
+            transform: translate(-50%, -50%);
+        }
+
+        .raccoon-img {
+            width: 120px;
+        }
+
+        .dialog-bubble {
+            bottom: 110px;
+            right: -20px;
+            font-size: 0.7em;
+            max-width: 140px;
+        }
+    }
+
+    /* Celulares pequeños */
+    @@media (max-width: 480px) {
+        .category-node {
+            width: 115px;
+            height: 115px;
+        }
+
+        .node-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .node-label {
+            font-size: 0.7em;
+        }
+
+        .raccoon-img {
+            width: 100px;
+        }
+
+        .dialog-bubble {
+            bottom: 95px;
+            right: -10px;
+            font-size: 0.65em;
+            max-width: 130px;
+            padding: 8px 10px;
+        }
+    }
 </style>
