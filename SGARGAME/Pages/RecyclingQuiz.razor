@@ -1,0 +1,277 @@
+﻿@page "/GameReciclaje"
+@using Ivan_SGAR_GAME.Models
+@using System.Linq
+@using System.Security.Cryptography
+
+<link href="css/RecyclingQuiz.css" rel="stylesheet" />
+
+<div class="quiz-container">
+
+    <div class="header vertical-stats">
+
+        <div class="stat-item score-stat">
+            <div class="stat-label">PUNTAJE:</div>
+            <div class="stat-value">**@currentScore**</div>
+        </div>
+
+        <div class="stat-item lives-stat">
+            <div class="stat-label">VIDAS:</div>
+            <div class="stat-value">@(new string('❤', lives))</div>
+        </div>
+
+        <a href="/MenuCategorias" class="understand-button map-button-header">MAPA DE CATEGORIAS</a>
+    </div>
+    @if (currentQuestionIndex < QuizQuestions.Count)
+    {
+        <div class="question-area">
+            <h3>Categoria 3: Evaluación del Guardián</h3>
+            <p>Demuestra todo lo que has aprendido sobre reciclaje.</p>
+
+            <div class="question-card">
+                <p>PREGUNTA @(currentQuestionIndex + 1)/@TotalQuestionsForQuiz</p>
+                <p><strong>@CurrentQuestion.QuestionText</strong></p>
+
+                <div class="options-grid">
+                    @for (int i = 0; i < CurrentQuestion.Options.Count; i++)
+                    {
+                        var index = i;
+                        <button class="@GetOptionClass(index)"
+                                @onclick="() => selectedAnswerIndex = index"
+                                disabled="@(hasAnswered)">
+                            <span class="option-letter">@(GetLetter(index))</span>
+                            @CurrentQuestion.Options[index]
+                        </button>
+                    }
+                </div>
+
+                <button class="btn-responder" @onclick="() => HandleAnswer(selectedAnswerIndex)" disabled="@(!answerSelected || hasAnswered)">
+                    RESPONDER
+                </button>
+            </div>
+
+            @if (hasAnswered)
+            {
+                <div class="@(isCorrect ? "feedback-correct" : "feedback-incorrect")">
+                    @if (isCorrect)
+                    {
+                        <span>¡Correcto!</span>
+                    }
+                    else
+                    {
+                        <span>¡Incorrecto!</span>
+                    }
+                    <p>@CurrentQuestion.Explanation</p>
+                    <button class="btn-siguiente" @onclick="NextQuestion">SIGUIENTE PREGUNTA</button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        // SOLUCIÓN DEL ERROR RZ1010: Eliminado @{ ... } innecesario.
+        // Ahora el código C# se ejecuta directamente dentro del bloque @else.
+        int correctAnswers = currentScore / 10;
+
+        <div class="final-screen">
+            @if (lives <= 0)
+            {
+                // **RESULTADO: VIDAS AGOTADAS** (Usando mapache triste)
+                <img src="imagenes/mapachetriste1.png" alt="Mapache Triste por Perder Vidas" class="mapache-low-score" />
+                <h2>¡Oh no! Te has quedado sin oportunidades.</h2>
+                <p>Tu puntaje final es: **@currentScore** (@correctAnswers / @TotalQuestionsForQuiz)</p>
+                <p>¡No te rindas! ¡Inténtalo de nuevo!</p>
+            }
+            else if (correctAnswers == TotalQuestionsForQuiz)
+            {
+                // **RESULTADO: MÁXIMO (10/10)** (Usando mapache feliz)
+                <img src="imagenes/dieznota.png" alt="Mapache Máximo Puntaje" class="mapache-max-score" />
+                <h2>¡Felicitaciones, Guardián!</h2>
+                <p>¡Has respondido **todas** las preguntas correctamente!</p>
+                <p>Tu puntaje final es: **@currentScore** (@correctAnswers / @TotalQuestionsForQuiz)</p>
+            }
+            else if (correctAnswers >= 8)
+            {
+                // **RESULTADO: ALTO (8 o 9)**
+                <img src="imagenes/ochoonueve.png" alt="Mapache Alto Puntaje" class="mapache-high-score" />
+                <h2>¡Muy bien hecho!</h2>
+                <p>¡Casi logras la perfección, Guardián!</p>
+                <p>Tu puntaje final es: **@currentScore** (@correctAnswers / @TotalQuestionsForQuiz)</p>
+            }
+            else if (correctAnswers >= 6)
+            {
+                // **RESULTADO: INTERMEDIO (6 o 7)**
+                <img src="imagenes/seisosiete.png" alt="Mapache Puntaje Intermedio" class="mapache-mid-score" />
+                <h2>¡Buen esfuerzo, Aprendiz!</h2>
+                <p>¡Has demostrado un gran conocimiento!</p>
+                <p>Tu puntaje final es: **@currentScore** (@correctAnswers / @TotalQuestionsForQuiz)</p>
+            }
+            else
+            {
+                // **RESULTADO: BAJO (0 a 5)**
+                <img src="imagenes/aseguir.png" alt="Mapache Puntaje Bajo" class="mapache-low-score" />
+                <h2>¡Juego Terminado!</h2>
+                <p>Sigue practicando para convertirte en un Guardián más fuerte.</p>
+                <p>Tu puntaje final es: **@currentScore** (@correctAnswers / @TotalQuestionsForQuiz)</p>
+            }
+            <button class="btn-reiniciar" @onclick="ResetQuiz">Reiniciar Juego</button>
+        </div>
+    }
+</div>
+
+@code {
+    private int currentScore = 0;
+    private int lives = 3;
+    private int currentQuestionIndex = 0;
+    private int selectedAnswerIndex = -1;
+    private bool hasAnswered = false;
+    private bool isCorrect = false;
+    private bool answerSelected => selectedAnswerIndex != -1;
+
+    private List<QuizItem> QuizQuestions = new List<QuizItem>();
+    private List<QuizItem> AllAvailableQuestions = new List<QuizItem>();
+    private const int TotalQuestionsForQuiz = 10;
+
+    private QuizItem CurrentQuestion => QuizQuestions[currentQuestionIndex];
+
+    protected override void OnInitialized()
+    {
+        LoadAllQuestions();
+        ShuffleAndSelectQuestions();
+    }
+
+    private void ShuffleAndSelectQuestions()
+    {
+        var pool = new List<QuizItem>(AllAvailableQuestions);
+        var rng = RandomNumberGenerator.Create();
+        int n = pool.Count;
+        while (n > 1)
+        {
+            byte[] box = new byte[1];
+            do rng.GetBytes(box);
+            while (!(box[0] < n * (byte.MaxValue / n)));
+            int k = (box[0] % n);
+            n--;
+
+            (pool[k], pool[n]) = (pool[n], pool[k]);
+        }
+
+        QuizQuestions = pool.Take(TotalQuestionsForQuiz).ToList();
+    }
+
+    private void LoadAllQuestions()
+    {
+        AllAvailableQuestions.Clear();
+
+        // 1. PREGUNTAS ORIGINALES (4 preguntas de ejemplo)
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿En qué contenedor debe depositarse una botella de vidrio vacía?", Options = new List<string> { "Contenedor Amarillo", "Contenedor Azul", "Contenedor Verde", "Contenedor Gris" }, CorrectAnswerIndex = 2, Explanation = "El contenedor **verde** es el correcto para depositar botellas, frascos y tarros de vidrio." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué se deposita en el Contenedor Azul?", Options = new List<string> { "Plásticos y latas", "Papel y Cartón", "Restos orgánicos", "Vidrio" }, CorrectAnswerIndex = 1, Explanation = "El contenedor **azul** está destinado al depósito de papel y cartón." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Son reciclables las servilletas de papel sucias o usadas?", Options = new List<string> { "Sí, en el contenedor azul.", "Sí, en el contenedor marrón (orgánico).", "No, van al contenedor gris (resto)." }, CorrectAnswerIndex = 2, Explanation = "Las servilletas sucias o manchadas no son reciclables y deben ir al contenedor gris (resto)." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué tipo de residuo es ideal para hacer composta casera?", Options = new List<string> { "Aceite de cocina usado", "Cáscaras de frutas y verduras", "Baterías y pilas", "Plástico film" }, CorrectAnswerIndex = 1, Explanation = "Las **cáscaras de frutas y verduras** son residuos orgánicos perfectos para el compostaje, que se convierte en abono natural." });
+
+        // 2. PREGUNTAS ADICIONALES (30 preguntas más)
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Cuál es el color del contenedor para envases y plásticos?", Options = new List<string> { "Contenedor Verde", "Contenedor Azul", "Contenedor Amarillo", "Contenedor Gris" }, CorrectAnswerIndex = 2, Explanation = "El contenedor **Amarillo** se usa para envases de plástico, latas y bricks." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué material NO debe tirarse al contenedor azul?", Options = new List<string> { "Periódicos", "Cajas de cartón", "Servilletas usadas", "Folletos publicitarios" }, CorrectAnswerIndex = 2, Explanation = "Las **servilletas usadas** o sucias no deben ir al contenedor azul por su alto contenido de materia orgánica o grasa." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "P7: ¿Qué residuos deben ir al punto limpio o 'Ecopunto'?", Options = new List<string> { "Restos de comida", "Papel y cartón", "Pilas y baterías", "Botellas de agua" }, CorrectAnswerIndex = 2, Explanation = "Las **pilas y baterías** son residuos peligrosos que requieren tratamiento especial en un punto limpio." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué es el compostaje?", Options = new List<string> { "Proceso de quemar basura", "Separar vidrio del plástico", "Transformar materia orgánica en abono", "Enterrar residuos en el jardín" }, CorrectAnswerIndex = 2, Explanation = "El compostaje es el proceso biológico que convierte los desechos orgánicos en **composta** (abono)." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Se reciclan los tapones de plástico junto a la botella?", Options = new List<string> { "Sí, siempre dentro de la botella.", "No, se deben quitar y tirar al contenedor gris.", "Sí, siempre en el contenedor amarillo.", "Sí, en el contenedor verde." }, CorrectAnswerIndex = 2, Explanation = "Los tapones y tapas de plástico también se reciclan en el **contenedor amarillo**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué se hace con el papel y cartón reciclado?", Options = new List<string> { "Se usa como combustible", "Se convierte en vidrio", "Se fabrican nuevos envases de cartón y papel", "Se tira al vertedero" }, CorrectAnswerIndex = 2, Explanation = "El papel reciclado se usa principalmente para fabricar **nuevo papel y cartón**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué son los 'bricks' (envases de cartón para leche o jugo)?", Options = new List<string> { "Solo plástico", "Solo papel", "Materiales mixtos (cartón, plástico y aluminio)", "Solo vidrio y cartón" }, CorrectAnswerIndex = 2, Explanation = "Los bricks son envases **multicapa** (papel, plástico y aluminio) y van al contenedor **amarillo**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué residuo NO se recomienda para la composta casera?", Options = new List<string> { "Cáscaras de huevo", "Filtros de café", "Carne y lácteos", "Restos de té" }, CorrectAnswerIndex = 2, Explanation = "La **carne y los lácteos** pueden atraer plagas y generar malos olores en la composta casera." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Dónde se deben depositar los botes de pintura o disolventes?", Options = new List<string> { "Contenedor Amarillo", "Contenedor Gris", "Punto Limpio", "Contenedor Azul" }, CorrectAnswerIndex = 2, Explanation = "Los botes con restos de pintura son residuos peligrosos y deben llevarse a un **Punto Limpio**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Cuál es el símbolo universal de reciclaje?", Options = new List<string> { "Un círculo rojo", "Las tres flechas de Möebius", "Una hoja verde", "Un cuadrado azul" }, CorrectAnswerIndex = 1, Explanation = "El lazo o **flechas de Möebius** es el símbolo internacional para el reciclaje." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué significa la regla de las 3R?", Options = new List<string> { "Recoger, Reutilizar, Reducir", "Reciclar, Reorganizar, Reparar", "Reducir, Reutilizar, Reciclar", "Restaurar, Recuperar, Reemplazar" }, CorrectAnswerIndex = 2, Explanation = "Las **3R** son la base de la gestión de residuos: **Reducir** el consumo, **Reutilizar** objetos, y por último, **Reciclar**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿El corcho natural (tapon de botella) es reciclable?", Options = new List<string> { "No, va al contenedor gris (resto)", "Sí, en el contenedor verde", "Sí, en el contenedor marrón (orgánico)", "Sí, en el punto limpio" }, CorrectAnswerIndex = 2, Explanation = "El corcho natural es un material orgánico y puede ir al **contenedor marrón (orgánico)**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Se debe enjuagar el envase de plástico antes de tirarlo al amarillo?", Options = new List<string> { "No, nunca es necesario.", "Sí, si tiene restos grandes de comida.", "Solo si el envase es muy grande.", "Sí, siempre con agua caliente." }, CorrectAnswerIndex = 1, Explanation = "Solo es necesario un enjuague ligero si el envase contiene **restos grandes o líquidos** para evitar contaminar otros residuos." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué tipo de residuo es un pañal usado?", Options = new List<string> { "Orgánico", "Plástico", "Papel", "Resto (No reciclable)" }, CorrectAnswerIndex = 3, Explanation = "Los **pañales usados** son residuos de 'resto' y van al contenedor gris, ya que son sanitarios y mixtos." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Cómo se llama el proceso de convertir un residuo en un producto de igual o mayor valor?", Options = new List<string> { "Reutilización", "Infrarreciclaje", "Upcycling (Suprarreciclaje)", "Compostaje" }, CorrectAnswerIndex = 2, Explanation = "El **Upcycling** o suprarreciclaje crea nuevos productos de mayor valor que el original, a diferencia del reciclaje convencional." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué contenedor se utiliza específicamente para residuos orgánicos?", Options = new List<string> { "Contenedor Gris", "Contenedor Naranja", "Contenedor Azul", "Contenedor Marrón" }, CorrectAnswerIndex = 3, Explanation = "El **contenedor marrón** es el designado para la recogida de restos de comida y residuos orgánicos." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Se reciclan las bombillas halógenas en el contenedor de vidrio?", Options = new List<string> { "Sí, todas las bombillas son vidrio.", "No, son residuos de resto.", "No, deben ir a un punto limpio.", "Sí, en el contenedor azul." }, CorrectAnswerIndex = 2, Explanation = "Las bombillas halógenas (y fluorescentes) contienen componentes que deben tratarse en un **punto limpio**, no van al contenedor verde." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Cuál es un beneficio directo del reciclaje de aluminio?", Options = new List<string> { "Reduce el consumo de papel", "Aumenta el uso de agua", "Ahorra hasta un 95% de energía", "Elimina los residuos orgánicos" }, CorrectAnswerIndex = 2, Explanation = "El reciclaje de aluminio es muy eficiente energéticamente, **ahorrando hasta el 95%** de la energía necesaria para producirlo desde cero." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Dónde se depositan los CDs, DVDs y cintas de video?", Options = new List<string> { "Contenedor Amarillo", "Contenedor Gris", "Punto Limpio", "Contenedor Azul" }, CorrectAnswerIndex = 2, Explanation = "Los CDs, DVDs y cintas son materiales plásticos complejos que van al **Punto Limpio** para su correcta gestión." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué significa 'Reutilizar'?", Options = new List<string> { "Tirar menos basura", "Darle un segundo uso a un objeto", "Separar los materiales en contenedores", "Crear abono con residuos" }, CorrectAnswerIndex = 1, Explanation = "**Reutilizar** significa usar un objeto más de una vez con el mismo o diferente propósito antes de desecharlo." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Las botellas de aceite de motor usado van al contenedor amarillo?", Options = new List<string> { "Sí, es plástico.", "No, son residuos peligrosos.", "Sí, si están vacías.", "No, van al contenedor gris." }, CorrectAnswerIndex = 1, Explanation = "El aceite de motor usado es un residuo peligroso y debe entregarse en un **Punto Limpio**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué son los R.A.E.E.?", Options = new List<string> { "Residuos de Alimentos y Excrementos", "Restos de Aparejos Electrónicos Escolares", "Residuos de Aparatos Eléctricos y Electrónicos", "Reciclaje de Aluminios Especiales y Envases" }, CorrectAnswerIndex = 2, Explanation = "**R.A.E.E.** es la sigla para Residuos de Aparatos Eléctricos y Electrónicos, como móviles, ordenadores y electrodomésticos." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Cómo se deben tirar las latas de bebidas y alimentos?", Options = new List<string> { "En el contenedor verde, ya que son metal.", "En el contenedor azul, ya que son rígidas.", "En el contenedor amarillo, aplastadas si es posible.", "En el contenedor gris, ya que son muy difíciles de reciclar." }, CorrectAnswerIndex = 2, Explanation = "Las latas (metal) van al **contenedor amarillo** junto con los plásticos y bricks." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Dónde va el papel de aluminio (papel albal)?", Options = new List<string> { "Contenedor Azul", "Contenedor Gris", "Contenedor Amarillo", "Contenedor Marrón" }, CorrectAnswerIndex = 2, Explanation = "El **papel de aluminio limpio** (albal) va al contenedor **amarillo**." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿El cristal de una ventana rota debe ir al contenedor verde?", Options = new List<string> { "Sí, es vidrio.", "No, es vidrio plano y tiene diferente composición.", "Sí, si lo envuelvo en papel.", "No, va al contenedor gris." }, CorrectAnswerIndex = 1, Explanation = "El **vidrio plano** (ventanas, espejos) tiene una composición diferente y debe ir al **Punto Limpio** o al contenedor gris." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Es necesario separar las grapas o los clips del papel antes de reciclar?", Options = new List<string> { "Sí, absolutamente siempre.", "No, las máquinas de reciclaje de papel las separan fácilmente.", "Solo si son de plástico.", "Solo si el volumen es muy grande." }, CorrectAnswerIndex = 1, Explanation = "Aunque es mejor quitarlas, las plantas de reciclaje de papel están diseñadas para separar fácilmente los pequeños elementos metálicos como grapas y clips." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué pasa si tiramos un envase de yogur al contenedor de papel?", Options = new List<string> { "Se recicla sin problemas.", "Contamina el lote de papel y cartón.", "El contenedor cambia de color.", "Se recicla como plástico." }, CorrectAnswerIndex = 1, Explanation = "El envase de yogur (plástico) contamina el lote de papel, disminuyendo la calidad de la fibra reciclada." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué se produce al reciclar el plástico PET (de botellas de agua)?", Options = new List<string> { "Bloques de hormigón", "Nuevas botellas o fibras textiles (ropa)", "Papel de envolver", "Metales preciosos" }, CorrectAnswerIndex = 1, Explanation = "El plástico PET se recicla en **nuevas botellas**, envases o **fibras** para hacer ropa polar y otros textiles." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿Qué material no se puede compostar?", Options = new List<string> { "Ceniza de madera", "Pelo y uñas", "Aceite de cocina", "Restos de café" }, CorrectAnswerIndex = 2, Explanation = "El **aceite de cocina** no debe ir a la composta porque daña el proceso biológico y atrae plagas; debe llevarse al punto limpio." });
+        AllAvailableQuestions.Add(new QuizItem { QuestionText = "¿El metal de las tapas de frascos (mermelada, conservas) va al amarillo?", Options = new List<string> { "No, va con el vidrio.", "Sí, siempre va al amarillo.", "No, va al contenedor gris (resto).", "Sí, si el frasco es de vidrio." }, CorrectAnswerIndex = 1, Explanation = "Las tapas de metal pequeñas se reciclan junto con las latas en el **contenedor amarillo**." });
+
+        // Total de preguntas: 34
+    }
+
+
+    private void HandleAnswer(int selectedIndex)
+    {
+        if (hasAnswered) return;
+
+        hasAnswered = true;
+        isCorrect = selectedIndex == CurrentQuestion.CorrectAnswerIndex;
+
+        if (isCorrect)
+        {
+            currentScore += 10;
+        }
+        else
+        {
+            lives--;
+        }
+    }
+
+    private void NextQuestion()
+    {
+        currentQuestionIndex++;
+        selectedAnswerIndex = -1;
+        hasAnswered = false;
+        isCorrect = false;
+
+        if (lives <= 0)
+        {
+            currentQuestionIndex = QuizQuestions.Count;
+        }
+    }
+
+    private void ResetQuiz()
+    {
+        currentScore = 0;
+        lives = 3;
+        currentQuestionIndex = 0;
+        selectedAnswerIndex = -1;
+        hasAnswered = false;
+        isCorrect = false;
+
+        ShuffleAndSelectQuestions();
+    }
+
+    private string GetLetter(int index) => index switch
+    {
+        0 => "A",
+        1 => "B",
+        2 => "C",
+        3 => "D",
+        _ => ""
+    };
+
+    private string GetOptionClass(int index)
+    {
+        if (!hasAnswered)
+        {
+            return selectedAnswerIndex == index ? "selected" : "";
+        }
+        else
+        {
+            if (index == CurrentQuestion.CorrectAnswerIndex)
+            {
+                return "correct-answer";
+            }
+            else if (index == selectedAnswerIndex && !isCorrect)
+            {
+                return "wrong-answer";
+            }
+        }
+        return "";
+    }
+}
