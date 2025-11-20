@@ -11,10 +11,15 @@ const tiposBasura = [
     { tipo: "papel", img: "/imagenes/objetos/papel.png" },
     { tipo: "botella", img: "/imagenes/objetos/agua.png" },
     { tipo: "lata", img: "/imagenes/objetos/lata.png" },
-    { tipo: "bolsa", img: "/imagenes/objetos/bolsaplastico.png" },
+    { tipo: "bolsa", img: "/imagenes/objetos/bolsadeplastico.png" },
     { tipo: "carton", img: "/imagenes/objetos/caja.png" },
     { tipo: "fruta", img: "/imagenes/objetos/cascara.png" },
-    { tipo: "hoja", img: "/imagenes/objetos/hoja.png" }
+    { tipo: "hoja", img: "/imagenes/objetos/hoja.png" },
+    { tipo: "botellavidrio", img: "/imagenes/objetos/botellavidrio.png" },
+    { tipo: "colillas", img: "/imagenes/objetos/colillas.png" },
+    { tipo: "panal", img: "/imagenes/objetos/panal.png" },
+    { tipo: "papelsucio", img: "/imagenes/objetos/papelsucio.png" }
+
 ];
 
 //window.iniciarJuego = function (dotnet) {
@@ -90,8 +95,8 @@ function crearBotes(gameArea) {
     contenedor.innerHTML = "";
 
     const bins = [
-        { key: "papel", label: "🗞️ Papel" },
-        { key: "plastico", label: "🛍️ Plástico" },
+        { key: "papel", label: "🗞️ Papel/Carton" },
+        { key: "plastico", label: "🛍️ Plástico/Latas" },
         { key: "vidrio", label: "🍾 Vidrio" },
         { key: "organico", label: "🍌 Orgánico" },
         { key: "noreciclable", label: "🚫 No reciclable" }
@@ -191,8 +196,8 @@ function validarCoincidencia(objetoTipo, boteTipo) {
     if (boteTipo === "organico") return objetoTipo === "fruta" || objetoTipo === "hoja";
     if (boteTipo === "plastico") return objetoTipo === "bolsa" || objetoTipo === "lata" || objetoTipo === "botella";
     if (boteTipo === "papel") return objetoTipo === "papel" || objetoTipo === "carton";
-    if (boteTipo === "vidrio") return objetoTipo === "botella";
-    if (boteTipo === "noreciclable") {
+    if (boteTipo === "vidrio") return objetoTipo === "botellavidrio";
+    if (boteTipo === "noreciclable") return objetoTipo === "panal" || objetoTipo === "papelsucio" || objetoTipo === "colillas"; {
         const reciclables = ["papel", "carton", "bolsa", "lata", "botella", "fruta", "hoja"];
         return !reciclables.includes(objetoTipo);
     }
