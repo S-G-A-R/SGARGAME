@@ -10,7 +10,6 @@
 
 
         <div class="category-node" style="left: 45%; top: 25%;">
-            @* Aumentado de 25% a 35% *@
             <a href="/categoria1">
                 <div class="node-icon category-1-icon">
                     <img src="imagenes/question.png" alt="Aprender sobre reciclaje" />
@@ -20,7 +19,6 @@
         </div>
 
         <div class="category-node" style="left: 30%; top: 48%;">
-            @* Aumentado de 50% a 58% *@
             <a href="/nivel1">
                 <div class="node-icon category-2-icon">
                     <img src="imagenes/papelerasgame.png" alt="Ordena y Recicla" />
@@ -30,7 +28,6 @@
         </div>
 
         <div class="category-node" style="left: 45%; top: 71%;">
-            @* Aumentado de 75% a 81% *@
             <a href="/GameReciclaje">
                 <div class="node-icon category-3-icon">
                     <img src="imagenes/portapapeles.png" alt="Evaluación del Guardián" />
@@ -41,7 +38,6 @@
 
         @* CONTENEDOR DEL MAPACHE AJUSTADO A LA NUEVA POSICIÓN DEL MAPA *@
         <div class="raccoon-dialog-container" style="left: 65%; top: 60%;">
-            @* Ajustado de 55% a 60% *@
             <p class="dialog-bubble">¡Este es el camino para ser un Guardián del Reciclaje!</p>
             <img src="/imagenes/mapachefelix.png" class="raccoon-img" />
         </div>
@@ -60,13 +56,13 @@
         padding: 0;
         height: 100%;
         width: 100%;
-        overflow: hidden; /* IMPORTANTE: evita cualquier borde */
+        overflow: hidden; /* evita cualquier borde */
         font-family: 'Poppins', sans-serif;
     }
 
     /* Fondo sin bordes */
     .category-map-container {
-        position: fixed; /* CAMBIO CLAVE: siempre cubre toda la pantalla */
+        position: fixed; /*  siempre cubre toda la pantalla */
         inset: 0;
         width: 100vw;
         height: 100vh;
@@ -87,7 +83,6 @@
             z-index: 1;
         }
 
-    /* AHORA sí, tu contenido va encima */
     .map-path {
         position: relative;
         z-index: 5;
@@ -202,7 +197,7 @@
         justify-content: center;
         transform: translate(-50%, -50%);
         z-index: 5;
-        /* 🔹 Mueve el mapache un poco más cerca del centro */
+        /* el mapache un poco más cerca del centro */
         top: 63%;
         left: 63%;
     }
@@ -233,7 +228,6 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-        /* 🔹 Flechita más sutil */
         .dialog-bubble::after {
             content: '';
             position: absolute;
@@ -257,7 +251,7 @@
             z-index: 1;
         }
 
-    /* 🔹 Animación simpática del mapache */
+    /* 🔹 Animación del mapache */
     @@keyframes wagTail {
         0%, 100% {
             transform: rotate(0deg);
@@ -269,8 +263,8 @@
     }
 
     /* ============================================================
-           📱 RESPONSIVE – Ajuste para pantallas pequeñas
-           ============================================================ */
+                📱 RESPONSIVE – Ajuste para pantallas pequeñas (USO DE VW)
+                ============================================================ */
 
     /* Tablets (pantallas medianas) */
     @@media (max-width: 1024px) {
@@ -291,92 +285,113 @@
         .dialog-bubble {
             font-size: 0.75em;
             max-width: 150px;
-            right: -50px;
+            right: -20vw;
             bottom: 100px;
         }
     }
 
-    /* Celulares grandes */
+    /* 🔥 AJUSTES CLAVE para Celulares (max-width: 768px) - CORRECCIÓN DEFINITIVA 🔥 */
     @@media (max-width: 768px) {
         .game-title {
-            font-size: 2.2em;
+            font-size: 8vw;
         }
 
         .subtitle {
-            font-size: 1em;
+            font-size: 4vw;
+        }
+        /* NODO Y TEXTO ADAPTABLES CON VW */
+        .category-node {
+            width: 32vw;
+            height: 32vw;
+            border: 3px solid #2c8c4a;
+            transform: translate(-50%, -50%);
         }
 
-        .category-node {
-            width: 130px;
-            height: 130px;
+        .node-icon {
+            width: 12vw;
+            height: 12vw;
+            margin-bottom: 5px;
         }
 
         .node-label {
-            font-size: 0.75em;
+            font-size: 3.3vw;
+            padding: 0 2vw;
         }
-        /* 🔹 Reubicación inteligente de los nodos */
+        /* POSICIONES DEL MAPA NO LINEAL EN MÓVIL */
         .category-node:nth-child(2) {
             left: 50% !important;
-            top: 28% !important;
-            transform: translateX(-50%);
+            top: 25% !important;
         }
-
+        /* CATEGORÍA 2 ALEJADA DEL MAPACHE */
         .category-node:nth-child(3) {
-            left: 50% !important;
+            left: 20% !important; /* Movido a la izquierda para el carril central */
             top: 50% !important;
-            transform: translateX(-50%);
         }
 
         .category-node:nth-child(4) {
             left: 50% !important;
-            top: 72% !important;
-            transform: translateX(-50%);
+            top: 75% !important;
         }
-        /* Mapache centrado */
+        /* MAPACHE Y BURBUJA: POSICIONADO MÁS A LA IZQUIERDA (70%) */
         .raccoon-dialog-container {
-            left: 50% !important;
-            top: 88% !important;
+            width: 38vw;
+            height: 45vw;
+            left: 70% !important; /* MOVEMOS TODO EL BLOQUE A 70% */
+            top: 60% !important;
             transform: translate(-50%, -50%);
+            display: block;
+            position: absolute;
         }
 
         .raccoon-img {
-            width: 120px;
+            width: 20vw;
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            right: 0; /* Mapache en la esquina inferior derecha del contenedor */
+            left: auto;
+            transform: none;
+            animation: wagTail 3s infinite ease-in-out;
         }
-
+        /* BURBUJA: A LA IZQUIERDA DEL MAPACHE (esquina superior izquierda del contenedor) */
         .dialog-bubble {
-            bottom: 110px;
-            right: -20px;
-            font-size: 0.7em;
-            max-width: 140px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 3vw;
+            max-width: 25vw; /* Más estrecha para la forma alargada */
+            padding: 10px 8px;
+            right: auto;
+            bottom: auto;
+            transform: none;
         }
     }
 
-    /* Celulares pequeños */
+    /* Celulares pequeños (max-width: 480px) */
     @@media (max-width: 480px) {
         .category-node {
-            width: 115px;
-            height: 115px;
+            width: 38vw;
+            height: 38vw;
         }
 
-        .node-icon {
-            width: 50px;
-            height: 50px;
-        }
-
-        .node-label {
-            font-size: 0.7em;
-        }
+            .category-node:nth-child(3) {
+                left: 15% !important; /* Más a la izquierda en pantallas pequeñas */
+            }
 
         .raccoon-img {
-            width: 100px;
+            width: 25vw;
+        }
+
+        .raccoon-dialog-container {
+            left: 75% !important; /* Ajustado a 75% */
+            top: 60% !important;
         }
 
         .dialog-bubble {
-            bottom: 95px;
-            right: -10px;
-            font-size: 0.65em;
-            max-width: 130px;
-            padding: 8px 10px;
+            font-size: 3.2vw;
+            max-width: 32vw;
+            right: -20vw;
+            right: -20vw;
         }
     }
 </style>
