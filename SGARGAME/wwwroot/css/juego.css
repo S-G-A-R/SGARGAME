@@ -103,8 +103,11 @@ body {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 12px;
+    gap: 14px;
     z-index: 20;
+    width: 95%; /* ✔ Se adapta a la pantalla */
+    max-width: 800px;
+    padding: 0 10px;
 }
 
 .botes {
@@ -119,6 +122,14 @@ body {
 
 /* Cada botón-bote */
 .bote {
+    display: flex; /* ✔ Centra icono + texto */
+    align-items: center; /* ✔ Verticalmente centrado */
+    justify-content: center; /* ✔ Horizontalmente centrado */
+    gap: 8px;
+    padding: 12px 16px;
+    min-width: 120px; /* ✔ No se hace demasiado pequeño */
+    flex: 1 1 calc(33% - 20px); /* ✔ Responsivo: 3 por fila */
+    max-width: 160px;
     background: #1775ff;
     color: white;
     font-weight: bold;
@@ -132,39 +143,43 @@ body {
     text-align: center;
     font-size: 16px;
     user-select: none;
+    /* QUITAR FOCUS AZUL */
+    outline: none !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25) !important;
 }
+
+
 
     /* Hover */
     .bote:hover {
-        background: #0f62d3;
+        filter: brightness(0.9);
         transform: scale(1.05);
     }
 
-    /* Seleccionado */
+    /* Seleccionado → se oscurece el color ORIGINAL */
     .bote.seleccionado {
-        background: #00c853;
-        border-color: #007d33;
+        filter: brightness(0.8);
         transform: scale(1.1);
     }
 
 /* Colores por tipo */
 .bin-papel {
-    background: #90e0ef;
+    background: #2F78C6;
     color: #003049;
 }
 
 .bin-plastico {
-    background: #f9c74f;
+    background: #D5E614;
     color: #4a3300;
 }
 
 .bin-vidrio {
-    background: #80ed99;
+    background: #54C417;
     color: #064e3b;
 }
 
 .bin-organico {
-    background: #ffafcc;
+    background: #E68E14;
     color: #4d002b;
 }
 
