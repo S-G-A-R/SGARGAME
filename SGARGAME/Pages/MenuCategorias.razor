@@ -60,30 +60,31 @@
 
     /* Fondo sin bordes */
     .category-map-container {
-        position: fixed; /*  siempre cubre toda la pantalla */
+        position: fixed;
         inset: 0;
         width: 100vw;
         height: 100vh;
-        background: url("imagenes/bosquee.png") no-repeat center center;
+        background: url("/imagenes/bosquee.png") no-repeat center center; /* ← usa ruta absoluta */
         background-size: cover;
         background-position: center;
         overflow: hidden;
-        z-index: 0;
+        z-index: 0; /* Base */
     }
 
-        /* Capa translúcida */
+        /* ✔ Capa translúcida mejorada (DETRÁS del contenido) */
         .category-map-container::before {
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(250, 250, 250, 0.25);
-            backdrop-filter: blur(2px);
-            z-index: 1;
+            background: rgba(0, 0, 0, 0.35); /* ← Cambia opacidad/color aquí */
+            backdrop-filter: blur(2px); /* Efecto difuso suave */
+            z-index: -1; /* ← AHORA SÍ va detrás del contenido */
         }
 
+    /* Contenido encima */
     .map-path {
         position: relative;
-        z-index: 5;
+        z-index: 5; /* Siempre arriba */
         width: 100%;
         height: 100%;
     }
