@@ -1,0 +1,364 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ------------------------------------- */
+/* TU CSS ORIGINAL + AJUSTES */
+/* ------------------------------------- */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: url("/imagenes/bosquee.png") no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Estilos generales del contenedor */
+.recycling-game-container {
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* CORRECCIÓN: debe estar encima del overlay */
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    background: transparent !important;
+}
+
+/* Capa traslúcida sobre el fondo */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    /* CORRECCIÓN: debe ir detrás del contenido pero no detrás del body */
+    z-index: 0;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    color: white;
+    font-weight: bold;
+}
+
+    .header .menu-icon,
+    .header .dots-icon {
+        font-size: 24px;
+    }
+
+    .header .app-title {
+        font-size: 20px;
+    }
+
+    .header .category-map {
+        font-size: 16px;
+    }
+
+/* Tarjeta de contenido principal */
+.content-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+    .content-card h2 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .content-card p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+/* Contenedores de ítems */
+.recycling-items-top,
+.recycling-items-middle,
+.recycling-category-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.item-box {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+    .item-box img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+    }
+
+.recycling-category-row .category-item-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.recycling-category-row .category-item {
+    background-color: #e8f5e9;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+    .recycling-category-row .category-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+    }
+
+.recycling-category-row p {
+    font-size: 12px;
+    color: #555;
+    margin: 0;
+}
+
+/* Basureros */
+.bins-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.bin {
+    width: 100px;
+    height: 150px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .bin p {
+        position: absolute;
+        bottom: 5px;
+        width: 100%;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    .bin .bin-item {
+        position: absolute;
+        top: 10px;
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+    }
+
+@media (max-width: 768px) {
+    .bin {
+        width: 80px;
+        height: 130px;
+        font-size: 10px;
+    }
+
+        .bin p {
+            font-size: 10px;
+            bottom: 5px;
+        }
+}
+
+.bin.yellow {
+    background-color: #FFC107;
+}
+
+.bin.blue {
+    background-color: #2196F3;
+}
+
+.bin.green {
+    background-color: #4CAF50;
+}
+
+.bin.organic {
+    background-color: #ff8000;
+}
+
+.bin.gray {
+    background-color: #9E9E9E;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.raccoon-dialog {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.raccoon-img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.raccoon-dialog p {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.understand-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+    .understand-button:hover {
+        background-color: #45a049;
+    }
+
+@media (max-width: 768px) {
+    .header, .content-card, .footer {
+        max-width: 95%;
+    }
+
+    .bins-container {
+        justify-content: space-around;
+        gap: 5px;
+    }
+
+    .bin {
+        width: 80px;
+        height: 120px;
+    }
+
+    .raccoon-dialog {
+        margin-bottom: 15px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+    .modal-content h2 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .modal-content textarea {
+        width: 100%;
+        height: 150px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        resize: none;
+        margin-bottom: 15px;
+    }
+
+.close-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+    .close-button:hover {
+        background-color: #388E3C;
+    }
+
+.bins-container p {
+    color: black !important;
+}
+
+/* Logo del juego */
+.logo-img {
+    width: 100px;
+    height: auto;
+    margin-right: 8px;
+    vertical-align: middle;
+}
