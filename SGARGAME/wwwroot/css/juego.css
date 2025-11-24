@@ -140,7 +140,7 @@ body {
 }
 
 #botesContainer .bote .icono-bote {
-    width: 40px !important; /* El !important fuerza la aplicación */
+    width: 40px !important; 
     height: 40px !important;
     margin-right: 8px;
     max-width: 100%;
