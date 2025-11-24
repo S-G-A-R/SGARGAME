@@ -3,11 +3,9 @@
 <div class="category-map-container">
     <div class="map-path">
 
-        <div class="map-header">
-            <h1 class="game-title">SGARGAME</h1>
-            <p class="subtitle">Mapa de Categorías</p>
+        <div class="hanging-sign">
+            <img src="/imagenes/cartel1.png" class="sign-img" alt="SGAR GAME">
         </div>
-
 
         <div class="category-node" style="left: 45%; top: 25%;">
             <a href="/categoria1">
@@ -90,34 +88,6 @@
         height: 100%;
     }
 
-
-
-
-    /* ------------------------------------- */
-    /* TÍTULO Y SUBTÍTULO */
-    /* ------------------------------------- */
-    .map-header {
-        position: relative;
-        top: 30px;
-        width: 100%;
-        text-align: center;
-        z-index: 5;
-    }
-
-    .game-title {
-        font-family: 'Baloo 2', cursive;
-        font-size: 3.5em;
-        color: #009879;
-        margin: 0;
-        letter-spacing: 2px;
-    }
-
-    .subtitle {
-        font-size: 1.4em;
-        font-weight: bold;
-        color: #444;
-        margin-top: 5px;
-    }
 
     /* ------------------------------------- */
     /* CÍRCULOS DE CATEGORÍAS */
@@ -394,5 +364,45 @@
             right: -20vw;
             right: -20vw;
         }
+    }
+
+    /* Contenedor del letrero */
+    .hanging-sign {
+        position: absolute;
+        top: -30px; /* Lo sube hacia arriba para que parezca colgado */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 480px; /* Tamaño del letrero - AJUSTA */
+        z-index: 10; /* No bloquea las categorías */
+        pointer-events: none; /* Evita interferir al dar clic */
+    }
+
+    /* Imagen */
+    .sign-img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Cuerdas */
+    .hanging-sign::before,
+    .hanging-sign::after {
+        content: "";
+        position: absolute;
+        top: -60px; /* Cuerdas más arriba */
+        width: 6px;
+        height: 70px; /* Largo de la cuerda */
+        background: #c29f7b; /* Color cuerda */
+        border-radius: 3px;
+    }
+
+    /* Cuerda izquierda */
+    .hanging-sign::before {
+        left: 25%;
+    }
+
+    /* Cuerda derecha */
+    .hanging-sign::after {
+        right: 25%;
     }
 </style>
