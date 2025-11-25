@@ -1,5 +1,5 @@
 ﻿/* ------------------------- */
-/*        ESTILO BASE        */
+/* ESTILO BASE      */
 /* ------------------------- */
 body {
     margin: 0;
@@ -26,14 +26,15 @@ body {
 
 .nivel1-container {
     padding: 20px;
-    min-height: 100vh;
+    /* 🔥 USAR LA ALTURA MÍNIMA DE LA PANTALLA COMPLETA */
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 /* ------------------------- */
-/*          TÍTULO           */
+/* TÍTULO           */
 /* ------------------------- */
 .titulo-nivel {
     font-size: clamp(1.8rem, 3vw, 2.5rem);
@@ -43,7 +44,7 @@ body {
 }
 
 /* ------------------------- */
-/*            HUD            */
+/* HUD            */
 /* ------------------------- */
 .hud {
     display: flex;
@@ -62,33 +63,23 @@ body {
 }
 
 /* ------------------------- */
-/*       ÁREA DEL JUEGO      */
+/* ÁREA DEL JUEGO       */
 /* ------------------------- */
-/*#gameArea {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    aspect-ratio: 16 / 10;*/ /* 🔥 Mantiene forma del canvas en móvil */
-/*border: 3px solid #22d3ee;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.60);
-    backdrop-filter: blur(3px);
-    margin: 10px auto;
-    overflow: hidden;
-}*/
-
 #gameArea {
     position: relative;
     width: 100%;
-    max-width: 800px; /* más ancho */
-    aspect-ratio: 16 / 10; /* 📌 vertical como un celular */
-    height: 60vh; /* 📌 ocupa el 75% de la pantalla */
+    /* 🔥 AUMENTAR ANCHO MÁXIMO DEL ÁREA DEL JUEGO */
+    max-width: 2350px;
+    /* 🔥 DARLE ALTO DINÁMICO OCUPANDO EL 80% DE LA PANTALLA */
+    height: 40dvh;
     border: 3px solid #22d3ee;
     border-radius: 16px;
     background: rgba(255,255,255,0.60);
     backdrop-filter: blur(3px);
     margin: 10px auto;
     overflow: hidden;
+    /* Asegura que el juego ocupe el espacio disponible y empuje los botones hacia abajo */
+    flex-grow: 1;
 }
 
 
@@ -98,17 +89,19 @@ body {
 }
 
 /* ------------------------- */
-/*        BOTES (RESP)       */
+/* BOTES (RESP)         */
 /* ------------------------- */
 #botesContainer {
     position: absolute;
-    bottom: 8px;
+    /* Ajustado a un valor más pequeño si los botones son más chicos */
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    flex-wrap: wrap; /* 🔥 Se acomodan solos en móvil */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    /* Gap ligeramente reducido para más espacio */
+    gap: 8px;
     width: 95%;
     z-index: 20;
 }
@@ -118,31 +111,38 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 20px);
-    font-size: clamp(12px, 2.5vw, 16px);
-    min-width: 115px;
-    border-radius: 12px;
+    /* 🔥 REDUCIR PADDING DE LOS BOTONES */
+    padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2.5vw, 16px);
+    /* 🔥 REDUCIR TAMAÑO DE FUENTE DE LOS BOTONES */
+    font-size: clamp(10px, 2vw, 14px);
+    /* 🔥 REDUCIR ANCHO MÍNIMO DE LOS BOTONES */
+    min-width: 100px;
+    border-radius: 10px;
     cursor: pointer;
     /* Evita que se rompan en móvil */
-    flex: 1 1 calc(50% - 10px);
-    max-width: 160px;
+    flex: 1 1 calc(50% - 8px);
+    /* REDUCIR ANCHO MÁXIMO DE LOS BOTONES */
+    max-width: 140px;
     border: 2px solid rgba(0,0,0,0.35);
     transition: 0.2s;
     user-select: none;
 }
 
+/* Ícono dentro del botón */
 .icono-bote {
-    width: 40px;
-    height: 40px;
-    margin-right: 8px;
+    /* 🔥 REDUCIR TAMAÑO DEL ÍCONO */
+    width: 30px;
+    height: 30px;
+    margin-right: 6px; /* Ajustar margen */
     max-width: 100%;
     height: auto;
 }
 
 #botesContainer .bote .icono-bote {
-    width: 40px !important; 
-    height: 40px !important;
-    margin-right: 8px;
+    /* 🔥 REDUCIR TAMAÑO DEL ÍCONO (IMPORTANTE) */
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 6px;
     max-width: 100%;
     height: auto;
 }
@@ -185,7 +185,7 @@ body {
 }
 
 /* ------------------------- */
-/*   BOTÓN INICIAR JUEGO     */
+/* BOTÓN INICIAR JUEGO      */
 /* ------------------------- */
 .btn-iniciar {
     margin-top: 12px;
@@ -205,15 +205,24 @@ body {
     }
 
 /* ------------------------- */
-/*  MOBILE OPTIMIZATIONS     */
+/* MOBILE OPTIMIZATIONS     */
 /* ------------------------- */
 @media (max-width: 600px) {
     #botesContainer {
-        bottom: 4px;
-        gap: 8px;
+        bottom: 2px;
+        gap: 6px;
     }
 
     .bote {
-        flex: 1 1 45%; /* 🔥 En móvil se acomodan en 2 columnas */
+        /* 🔥 En móvil se acomodan en 2 columnas, con menos margen */
+        flex: 1 1 48%;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .icono-bote {
+        width: 25px !important;
+        height: 25px !important;
+        margin-right: 4px;
     }
 }
