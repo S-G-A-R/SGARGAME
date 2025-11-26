@@ -7,8 +7,6 @@
 <div class="recycling-game-container">
     <div class="header">
         <span class="app-title">SGAR GAME</span>
-        <!-- ELEMENTO ACTUALIZADO: Enlace con estilo de botón -->
-
         <a href="/MenuCategorias" class="understand-button map-button-header">MAPA DE CATEGORIAS</a>
     </div>
 
@@ -18,13 +16,20 @@
         <p>¡Guía rápida para clasificar tu basura!</p>
 
         <div class="recycling-items-top">
-            <div class="item-box"><img src="/imagenes/lataplastico.png" alt="Plastico y Latas" /></div>
-            <div class="item-box"><img src="/imagenes/periodico.png" alt="Papel y Cartón" /></div>
-            <div class="item-box"><img src="/imagenes/vidrio.png" alt="Vidrio" /></div>
-            <div class="item-box"><img src="/imagenes/banana.png" alt="Organico" /></div>
-            <div class="item-box"><img src="/imagenes/platosrotos.png" alt="No Reciclable" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/lata.png" alt="Plastico y Latas" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/papel.png" alt="Papel y Cartón" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/botellavidrio.png" alt="Vidrio" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/cascara.png" alt="Organico" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/panal.png" alt="No Reciclable" /></div>
         </div>
 
+        <div class="recycling-items-middle">
+            <div class="item-box"><img src="/imagenes/objetos/bolsadeplastico.png" alt="Envase de plástico" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/caja.png" alt="Caja de Cartón" /></div>
+            <div class="item-box"><img src="/imagenes/vidrio.png" alt="Vidrio" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/hoja.png" alt="Cáscara de huevo" /></div>
+            <div class="item-box"><img src="/imagenes/objetos/papelsucio.png" alt="Papel de aluminio" /></div>
+        </div>
         <div class="bins-container">
             <div class="bin yellow" @onclick="() => MostrarInfoAmarillo()">
                 <img src="/imagenes/papeleralatas.png" class="bin-item" />
@@ -58,7 +63,7 @@
             <img src="/imagenes/mapache.png" class="raccoon-img" />
             <p>¡Es fácil si sabes dónde va cada cosa!</p>
         </div>
-        <button class="understand-button">ENTENDIDO. ¡A JUGAR! →</button>
+        <a href="/nivel1" class="understand-button">ENTENDIDO. ¡A JUGAR! →</a>
     </div>
 </div>
 
