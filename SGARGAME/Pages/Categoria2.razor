@@ -5,12 +5,12 @@
 
 <div class="nivel1-container">
     <div class="header">
-        <span class="app-title" style="color: white;">SGAR GAME</span>
-        <!-- ELEMENTO ACTUALIZADO: Enlace con estilo de botón -->
-
+        <div class="header-left">
+            <span class="app-title">SGAR GAME</span>
+            <h2 class="titulo-nivel-pequeno">♻️ Categoría 2: Ordena y recicla</h2>
+        </div>
         <a href="/MenuCategorias" class="understand-button map-button-header">MAPA DE CATEGORIAS</a>
-    </div>  
-    <h2 class="titulo-nivel">♻️ Categoría 2: Ordena y recicla</h2>
+    </div>
 
     <div class="hud">
         <div class="hud-item">
@@ -21,7 +21,25 @@
             <span class="hud-label">Vidas</span>
             <span class="hud-value">@vidas</span>
         </div>
+        <div class="hub">
+            <div style="margin-bottom: 10px;">
+                <label for="cantidadObjetos">Cantidad de bjetos:</label>
+                <select @bind="cantidadObjetosSeleccionada" id="cantidadObjetos" class="hud-select" style="padding: 5px; border-radius: 5px;">
+                    <option value="1">1 Objeto (Fácil)</option>
+                    <option value="2">2 Objetos (Normal)</option>
+                    <option value="3">3 Objetos (Difícil)</option>
+                    <option value="4">4 Objetos (Experto)</option>
+                </select>
+            </div>
+        </div>
     </div>
+
+    @if (!JuegoListo)
+    {
+        <p style="color: #fff; background-color: #f87171; padding: 5px 10px; border-radius: 5px; margin-top: 10px;">
+            ⚠️ Selecciona la cantidad de objetos antes de iniciar.
+        </p>
+    }
 
     <div id="gameArea">
         <!-- El canvas puede estar aquí o será creado por JS si no existe -->
@@ -42,6 +60,10 @@
 @code {
     private int puntos = 0;
     private int vidas = 3;
+    // Nueva variable para la selección del usuario
+    private int cantidadObjetosSeleccionada = 0; // Valor inicial
+
+    private bool JuegoListo => cantidadObjetosSeleccionada > 0;
 
     private async Task IniciarJuego()
     {
@@ -49,13 +71,13 @@
         vidas = 3;
         StateHasChanged();
         // Llamamos al JS; JS se encargará de crear botes si hacen falta
-        await JS.InvokeVoidAsync("iniciarJuego", DotNetObjectReference.Create(this));
+        await JS.InvokeVoidAsync("iniciarJuego", DotNetObjectReference.Create(this), cantidadObjetosSeleccionada);
     }
 
     [JSInvokable]
     public async Task AumentarPuntos()
     {
-        puntos += 5;
+        puntos += 1;
         StateHasChanged();
 
         if (puntos % 50 == 0)

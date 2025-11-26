@@ -1,29 +1,31 @@
 ﻿let canvas, ctx;
 let objetos = [];
-let velocidadCaida = 3;
+let velocidadCaida = 2;
 let interval;
 let dotnetRef;
 let boteSeleccionado = null;
 let tiempoUltimoObjeto = 0;
 let intervaloGeneracion = 1200;
-
+let cantidadObjectos = 2;
 const tiposBasura = [
     { tipo: "papel", img: "/imagenes/objetos/papel.png" },
-    { tipo: "botella", img: "/imagenes/objetos/agua.png" },
-    { tipo: "lata", img: "/imagenes/objetos/lata.png" },
-    { tipo: "bolsa", img: "/imagenes/objetos/bolsadeplastico.png" },
-    { tipo: "carton", img: "/imagenes/objetos/caja.png" },
-    { tipo: "fruta", img: "/imagenes/objetos/cascara.png" },
-    { tipo: "hoja", img: "/imagenes/objetos/hoja.png" },
-    { tipo: "botellavidrio", img: "/imagenes/objetos/botellavidrio.png" },
-    { tipo: "colillas", img: "/imagenes/objetos/colillas.png" },
-    { tipo: "panal", img: "/imagenes/objetos/panal.png" },
-    { tipo: "papelsucio", img: "/imagenes/objetos/papelsucio.png" }
+    { tipo: "plastico", img: "/imagenes/objetos/agua.png" },
+    { tipo: "plastico", img: "/imagenes/objetos/lata.png" },
+    { tipo: "plastico", img: "/imagenes/objetos/bolsadeplastico.png" },
+    { tipo: "papel", img: "/imagenes/objetos/caja.png" },
+    { tipo: "organico", img: "/imagenes/objetos/cascara.png" },
+    { tipo: "organico", img: "/imagenes/objetos/hoja.png" },
+    { tipo: "vidrio", img: "/imagenes/objetos/botellavidrio.png" },
+    { tipo: "inorganico", img: "/imagenes/objetos/colillas.png" },
+    { tipo: "inorganico", img: "/imagenes/objetos/panal.png" },
+    { tipo: "inorganico", img: "/imagenes/objetos/papelsucio.png" }
 ];
 
-window.iniciarJuego = function (dotnet) {
+window.iniciarJuego = function (dotnet, cantidad) {
     try {
         dotnetRef = dotnet;
+
+        cantidadObjectos = cantidad || 2;
 
         const gameArea = document.getElementById("gameArea");
         if (!gameArea) return;
@@ -111,11 +113,11 @@ function crearBotes(gameArea) {
     contenedor.innerHTML = "";
 
     const bins = [
-        { key: "papel", label: "Papel/Cartón", img: "/imagenes/papelerapapel.png" },
-        { key: "plastico", label: "Plástico/Latas", img: "/imagenes/papeleralatas.png" },
-        { key: "vidrio", label: "Vidrio", img: "/imagenes/papeleravidrio.png" },
-        { key: "organico", label: "Orgánico", img: "/imagenes/papeleraorganicos.png" },
-        { key: "noreciclable", label: "No reciclable", img: "/imagenes/papeleranoreci.png" }
+        { key: "azul", label: "Papel/Cartón", img: "/imagenes/papelerapapel.png" },
+        { key: "amarillo", label: "Plástico/Latas", img: "/imagenes/papeleralatas.png" },
+        { key: "verde", label: "Vidrio", img: "/imagenes/papeleravidrio.png" },
+        { key: "naranja", label: "Orgánico", img: "/imagenes/papeleraorganicos.png" },
+        { key: "gris", label: "No reciclable", img: "/imagenes/papeleranoreci.png" }
     ];
 
     bins.forEach(b => {
@@ -142,7 +144,7 @@ function update() {
     const ahora = Date.now();
 
     // Generar nuevos objetos
-    if (ahora - tiempoUltimoObjeto > intervaloGeneracion && objetos.length < 5) {
+    if (ahora - tiempoUltimoObjeto > intervaloGeneracion && objetos.length < cantidadObjectos) {
         tiempoUltimoObjeto = ahora;
 
         const tipo = tiposBasura[Math.floor(Math.random() * tiposBasura.length)];
@@ -176,6 +178,7 @@ function update() {
         if (o.y + o.alto >= canvas.height - 50) {
             dotnetRef?.invokeMethodAsync("PerderVida").catch(() => { });
             objetos.splice(i, 1);
+            
             i--;
         }
     }
@@ -190,24 +193,25 @@ function seleccionarBote(tipo) {
 
     const objeto = objetos.reduce((masCercano, actual) =>
         !masCercano || actual.y > masCercano.y ? actual : masCercano, null);
-
+    
     if (!objeto) return;
 
     if (validarCoincidencia(objeto.tipo, boteSeleccionado)) {
-        dotnetRef?.invokeMethodAsync("AumentarPuntos").catch(() => { });
+        dotnetRef?.invokeMethodAsync("AumentarPuntos").catch(() => { });       
     } else {
         dotnetRef?.invokeMethodAsync("PerderVida").catch(() => { });
     }
-
+   
     objetos = objetos.filter(o => o !== objeto);
+   
 }
 
 function validarCoincidencia(objetoTipo, boteTipo) {
-    if (boteTipo === "organico") return ["fruta", "hoja"].includes(objetoTipo);
-    if (boteTipo === "plastico") return ["bolsa", "lata", "botella"].includes(objetoTipo);
-    if (boteTipo === "papel") return ["papel", "carton"].includes(objetoTipo);
-    if (boteTipo === "vidrio") return objetoTipo === "botellavidrio";
-    if (boteTipo === "noreciclable") return ["panal", "papelsucio", "colillas"].includes(objetoTipo);
+    if (boteTipo === "naranja") return ["organico"].includes(objetoTipo);
+    if (boteTipo === "amarillo") return ["plastico"].includes(objetoTipo);
+    if (boteTipo === "azul") return ["papel"].includes(objetoTipo);
+    if (boteTipo === "verde") return objetoTipo === "vidrio";
+    if (boteTipo === "gris") return objetoTipo === "inorganico";
 
     return false;
 }

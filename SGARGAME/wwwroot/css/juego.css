@@ -25,7 +25,10 @@ body {
     }
 
 .nivel1-container {
-    padding: 20px;
+    padding-top: 5px; /* De 20px a 5px, por ejemplo */
+    padding-bottom: 20px; /* Mantener el de abajo si lo necesitas */
+    padding-left: 20px;
+    padding-right: 20px;
     /* 🔥 USAR LA ALTURA MÍNIMA DE LA PANTALLA COMPLETA */
     min-height: 100dvh;
     display: flex;
@@ -41,6 +44,38 @@ body {
     margin-bottom: 20px;
     color: #38bdf8;
     text-shadow: 2px 2px 10px #0ea5e9;
+}
+
+.header {
+    display: flex; /* Habilitar flexbox */
+    justify-content: space-between; /* Empuja los elementos a los extremos */
+    align-items: center; /* Centra verticalmente */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    padding: 2px 0; /* Un poco de padding vertical */
+    margin-bottom: 2px; /* Espacio debajo del header */
+}
+
+.header-left {
+    display: flex; /* Para alinear el app-title y el h2 */
+    flex-direction: column; /* Apilar SGAR GAME y el título de categoría */
+    align-items: flex-start; /* 🔥 Alinear todo a la izquierda */
+    gap: 5px; /* Pequeño espacio entre ellos */
+}
+
+.app-title {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: white; /* Ahora manejado por CSS */
+    font-weight: bold;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+.titulo-nivel-pequeno {
+    font-size: clamp(1.1rem, 2vw, 1.5rem); /* 🔥 Más pequeño */
+    margin: 0; /* 🔥 Quitar margen superior e inferior por defecto */
+    color: #38bdf8; /* Color original */
+    text-shadow: 1px 1px 5px #0ea5e9; /* Sombra similar */
+    text-align: left; /* Asegurar alineación a la izquierda */
+    width: 1100%; /* Asegura que ocupe el espacio */
 }
 
 /* ------------------------- */
@@ -80,6 +115,7 @@ body {
     overflow: hidden;
     /* Asegura que el juego ocupe el espacio disponible y empuje los botones hacia abajo */
     flex-grow: 1;
+
 }
 
 
@@ -159,27 +195,27 @@ body {
 }
 
 /* ---------------- COLORS ---------------- */
-.bin-papel {
+.bin-azul {
     background: #3265D1;
     color: #003049;
 }
 
-.bin-plastico {
+.bin-amarillo {
     background: #E8D125;
     color: #4a3300;
 }
 
-.bin-vidrio {
+.bin-verde {
     background: #54C417;
     color: #064e3b;
 }
 
-.bin-organico {
+.bin-naranja {
     background: #E68E14;
     color: #4d002b;
 }
 
-.bin-noreciclable {
+.bin-gris {
     background: #8d8d8d;
     color: #fff;
 }
@@ -203,6 +239,18 @@ body {
     .btn-iniciar:hover {
         transform: scale(1.05);
     }
+
+.understand-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
 
 /* ------------------------- */
 /* MOBILE OPTIMIZATIONS     */
